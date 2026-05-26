@@ -1,0 +1,10 @@
+const express = require('express');
+const { signup, getProfile, login } = require('../controllers/authController');
+const verifyToken = require('../middleware/authMiddleware');
+const router = express.Router();
+
+router.post('/signup', signup);
+router.post('/login', login);
+router.get('/profile', verifyToken,getProfile);
+
+module.exports = router;

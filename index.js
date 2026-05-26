@@ -1,0 +1,24 @@
+require('dotenv').config();
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+require('./config/db');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+const authRoutes = require('./routes/authRoutes');
+
+app.use(express.json());
+
+app.use('/auth', authRoutes);
+
+app.get('/', (req, res)=>{
+    res.json({ message : "Chat API is running" })
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port : ${PORT}`);
+})

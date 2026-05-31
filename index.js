@@ -6,19 +6,24 @@ require('./config/db');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-const authRoutes = require('./routes/authRoutes');
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(express.json());
 
+const authRoutes = require('./routes/authRoutes');
 app.use('/auth', authRoutes);
 
-app.get('/', (req, res)=>{
-    res.json({ message : "Chat API is running" })
+const chatSocket = require('./socket/chatSocket');
+chatSocket(io);
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Chat API is running' });
 });
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server running on port : ${PORT}`);
-})
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, () => console.log(`Server running on port : ${PORT}`));

@@ -21,6 +21,9 @@ app.use('/auth', authRoutes);
 const chatSocket = require('./socket/chatSocket');
 chatSocket(io);
 
+const roomRoutes = require('./routes/roomRoutes');
+app.use('/rooms', roomRoutes);
+
 app.get('/', (req, res) => {
   res.json({ message: 'Chat API is running' });
 });

@@ -1,19 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
+const cors = require('cors');
 const { Server } = require('socket.io');
 require('./config/db');
 
 const app = express();
 const server = http.createServer(app);
+
+app.use(cors());
+app.use(express.json());
 const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
   }
 });
-
-app.use(express.json());
 
 const authRoutes = require('./routes/authRoutes');
 app.use('/auth', authRoutes);
